@@ -1,14 +1,7 @@
 library(ggplot2)
-data_description_analysis <- function(data_path){
-  muscle_forces_over_time <- plot_muscle_forces_over_time(data_path)
-  plot_JR3_forces_over_time(data_path)
-  #TODO get list of wrenches from data
-  list_of_3_wrenches <- list(c(4.10,2.24,1,0,0,0), c(-7.10,2.24,1,0,0,0), c(-6.10,-7.7,1,0,0,0))
-  list_of_SD_for_3_wrenches <- list(c(0.5,0.5,0.5,0.5,0.5), c(0.5,0.5,0.5,0.5,0.5), c(0.5,0.5,0.5,0.5,0.5))
-  plot_JR3_endpoint_force_vectors(list_of_3_wrenches, list_of_SD_for_3_wrenches)
-}
-
 plot_muscle_forces_over_time <- function(data_path) {
+  browser()
+  #TODO get ts data from data_path instead of economics_long. Color by muscle number.
   p <- ggplot(economics_long, aes(date, value01, colour = variable), xlab="time (ms)") +
     geom_line()
   return(p)
@@ -43,6 +36,23 @@ wrench_vector_to_labeled_vals <- function(wrench_vector){
 
                 ))
 }
+
+
+compose_dataframe_of_first_three_muscle_activation_patterns <- function(first_three_forces){
+  first_three_muscle_activation_patterns <- rbind(
+    unique(first_three_forces$reference_M0),
+    unique(first_three_forces$reference_M1),
+    unique(first_three_forces$reference_M2),
+    unique(first_three_forces$reference_M3),
+    unique(first_three_forces$reference_M4),
+    unique(first_three_forces$reference_M5),
+    unique(first_three_forces$reference_M6)
+  )
+  row.names(first_three_muscle_activation_patterns) <- muscle_names
+  colnames(first_three_muscle_activation_patterns) <- c("A","B","C")
+  return(t(first_three_muscle_activation_patterns))
+}
+
 
 plot_wrench_text <- function(wrench, x=0,y=-10, add_SD=FALSE){
   wrench_text <- wrench_vector_to_labeled_vals(wrench)
@@ -88,3 +98,18 @@ plot_JR3_endpoint_force_vectors <- function(list_of_3_wrenches, list_of_SD_for_3
   plot_wrench_SD_text(wrench_c_SD)
   
 }
+
+
+
+
+data_description_analysis <- function(data_path){
+  plot(plot_muscle_forces_over_time(data_path))
+  plot(plot_JR3_forces_over_time(data_path))
+  #TODO get list of wrenches from data
+  list_of_3_wrenches <- list(c(4.10,2.24,1,0,0,0), c(-7.10,2.24,1,0,0,0), c(-6.10,-7.7,1,0,0,0))
+  list_of_SD_for_3_wrenches <- list(c(0.5,0.5,0.5,0.5,0.5), c(0.5,0.5,0.5,0.5,0.5), c(0.5,0.5,0.5,0.5,0.5))
+  plot_JR3_endpoint_force_vectors(list_of_3_wrenches, list_of_SD_for_3_wrenches)
+}
+
+
+
