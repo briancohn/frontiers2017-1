@@ -64,7 +64,7 @@ There exists a gap between the mechanical properties of cadaveric tendon-driven 
 We addressed this limitation by inventing a tension-to-force experiment that collects data across hundreds of isometric endpoint postures of any tendon-driven limb controlled by up to 10 newtons per tendon.
 We experimented with a bioinspired robotic finger as a stand-in for a cadaveric finger, attached a six-dimensional force sensor at its fingertip, we wound tension-controlled strings about its joints in an arbitrary routing.
 The fingertip fit snugly in the force sensor, which was affixed to a manipulator---that way, we were able to move the posture with sub millimeter precision, in under 2 seconds.
-Using the resultant data (with 1000 postures and 100 tensions across 7-tendons) we (i) characterized static and dynamic components of the tension-to-force relationship, (ii) identified specific postures that are more challenging to control accurately, (iii) compared the performance of models from the literature (linear, dynamic, and linear-cascade), (iv) and evaluated the robustness of results under differing sample size and noise.
+Using the resultant data (with 1000 postures along a line and 100 tensions across 7-tendons for each posture) we (i) characterized static and dynamic components of the tension-to-force relationship, (ii) identified specific postures that are more challenging to control accurately, (iii) compared the performance of models from the literature (linear, dynamic, and linear-cascade), (iv) and evaluated the robustness of results under differing sample size and noise.
 Our contribution empowers artificial intelligence experts to develop robust interpretations of a model's performance atop data from a postural workspace, thereby enabling biologically-inspired tactile sensing from the muscle properties themselves.
 In capturing the variables associated with posture-specific tendon-driven control, we open a new front for thorough understanding of the biomechanical constraints and pressures across in learning, health, disease, and in an evolutionary context.
 
@@ -107,7 +107,7 @@ We thank <KIAN TODO Add Posture Dependency Interns>, M Ishikawa, T Stroobosscher
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=15cm]{figures/overview/overview.jpg}% This is a *.jpg file
+\includegraphics[width=17.5cm]{figures/overview/overview.jpg}% This is a *.jpg file
 \end{center}
 \caption{Experimental paradigm for all posture dependency experiments.}
 \label{fig:overview}
@@ -115,23 +115,25 @@ We thank <KIAN TODO Add Posture Dependency Interns>, M Ishikawa, T Stroobosscher
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=15cm]{figures/data_description/data_description.jpg}% This is a *.jpg file
+\includegraphics[width=17.5cm]{figures/data_description/data_description.jpg}% This is a *.jpg file
 \end{center}
-\caption{Description of the data and signals recorded for this analysis. }
+\caption{Description of the data and signals recorded for this analysis. In viewing the SD of measured force once the signal has stablilized (by extracting only the last 100ms) we found the max, first quartile, median, third quartile, and max of SD were X,Y,Z,A,B, respectively.}
 \label{fig:data_description}
 \end{figure}
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=15cm]{figures/rise_time_and_delta_activation/rise_time_and_delta_activation.jpg}% This is a *.jpg file
+\includegraphics[width=17.5cm]{figures/rise_time_and_delta_activation/rise_time_and_delta_activation.jpg}% This is a *.jpg file
 \end{center}
 \caption{Rise time and how the change in activation changes the settling time. }
 \label{fig:rise_time_and_delta_activation}
 \end{figure}
 
+The resultant equation for the linear fit of $t_{rise}$ as a function of $\delta a$ is $t_{rise}$
+
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=15cm]{figures/creating_A_matrix/creating_A_matrix.jpg}% This is a *.jpg file
+\includegraphics[width=17.5cm]{figures/creating_A_matrix/creating_A_matrix.jpg}% This is a *.jpg file
 \end{center}
 \caption{Application of linear modeling to tension-to-force relationships }
 \label{fig:creating_A_matrix}
@@ -139,24 +141,24 @@ We thank <KIAN TODO Add Posture Dependency Interns>, M Ishikawa, T Stroobosscher
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=15cm]{figures/model_fit/model_fit.jpg}% This is a *.jpg file
+\includegraphics[width=17.5cm]{figures/model_fit/model_fit.jpg}% This is a *.jpg file
 \end{center}
-\caption{Model fit for a linear matrix in different postures}
+\caption{Model fit for a linear matrix in different postures. Fit across the Y posture line (while X and Z were fixed), and the X posture line (while Y and Z were fixed), showed no significant areas of higher or lower model fit (p=0.X, p=0.7, respectively).}
 \label{fig:model_fit}
 \end{figure}
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=15cm]{figures/muscle_force_coherence/muscle_force_coherence.jpg}% This is a *.jpg file
+\includegraphics[width=17.5cm]{figures/muscle_force_coherence/muscle_force_coherence.jpg}% This is a *.jpg file
 \end{center}
-\caption{Tension to Force coherence across different muscles, and with respect to the linear model's observed tendon contribution}
+\caption{Tension-to-force coherence across different muscles, and with respect to the linear model's observed tendon contribution}
 \label{fig:muscle_force_coherence}
 \end{figure}
 
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=15cm]{figures/responsibility_of_a_muscle/responsibility_of_a_muscle.jpg}% This is a *.jpg file
+\includegraphics[width=17.5cm]{figures/responsibility_of_a_muscle/responsibility_of_a_muscle.jpg}% This is a *.jpg file
 \end{center}
 \caption{Responsibility of a muscle in output force space }
 \label{fig:responsibility_of_a_muscle}
@@ -164,7 +166,7 @@ We thank <KIAN TODO Add Posture Dependency Interns>, M Ishikawa, T Stroobosscher
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=15cm]{figures/dynamics_vs_statics/dynamics_vs_statics.jpg}% This is a *.jpg file
+\includegraphics[width=17.5cm]{figures/dynamics_vs_statics/dynamics_vs_statics.jpg}% This is a *.jpg file
 \end{center}
 \caption{KIAN TODO}
 \label{fig:dynamics_vs_statics}
