@@ -2,7 +2,7 @@ library(ggplot2)
 
 plotting_specifics_for_force_control <- function(forces,
                                                  ylim,
-                                                 ticks = c(0, 400, 800, 1200, 1600,2000,2400,2800,3200)){
+                                                 ticks){
   plot.new()
   plot.window(xlim=range(ticks),ylim=ylim)
   axis(1, at = ticks)
@@ -10,13 +10,14 @@ plotting_specifics_for_force_control <- function(forces,
   box()
   adept_x_val <- forces[[5]][1, 'adept_x']
   adept_y_val <- forces[[5]][1, 'adept_y']
-  title(main="Forces 5-8 in Posture #1", sub=paste("Adept x:",adept_x_val, "Adept y:", adept_y_val), 
+  title(main="Forces from posture #1", sub=paste("Adept x:",adept_x_val, "Adept y:", adept_y_val), 
         xlab="Time (ms)", ylab="Force (N)")
   
 }
 
 plot_muscle_forces_over_time <- function(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest) {
-  plotting_specifics_for_force_control(forces, ylim=c(minimum_tendon_force, maximum_tendon_force))
+  ticks = seq(0,length(indices_of_interest)*800, by=400)
+  plotting_specifics_for_force_control(forces, ylim=c(minimum_tendon_force, maximum_tendon_force),ticks)
   lapply(list(do.call('rbind',forces[indices_of_interest])),
          function(force_ts) {
            plot_tendon_rise_time_curves(force_ts, tendon_of_interest_string=c("M0", "M1", "M2","M3", "M4", "M5", "M6"), ylim=c(minimum_tendon_force,maximum_tendon_force))
@@ -25,11 +26,12 @@ plot_muscle_forces_over_time <- function(forces, minimum_tendon_force, maximum_t
   return(0)
 }
 
-plot_JR3_forces_over_time <- function(forces, minimum_tendon_force, maximum_tendon_force) {
+plot_JR3_forces_over_time <- function(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest) {
   #TODO get ts data from data_path instead of economics_long. Color by force + dotted for torques
 
-  sample_of_forces <- forces[5:8]
-  plotting_specifics_for_force_control(forces, ylim=c(-3.75,1), ticks = seq(0,4*800, by=400))
+  sample_of_forces <- forces[indices_of_interest]
+  xmax_milliseconds <- length(indices_of_interest)*800
+  plotting_specifics_for_force_control(forces, ylim=c(-3.75,1), ticks = seq(0,xmax_milliseconds, by=400))
   smoothed_curves <- lapply(list(do.call('rbind', sample_of_forces)), plot_force_smoothed_curves)
   return(0)
 }
@@ -147,7 +149,7 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   par(mfrow=c(1,1))
   plot(plot_muscle_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest))
   par(mfrow=c(1,1))
-  plot(plot_JR3_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force))
+  plot(plot_JR3_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest))
   
   #Get the mean of the last 100 force values for each of the force signals, for the 5th through 8th muscle activation patterns.
   list_of_tail_wrench_mean <- lapply(forces[indices_of_interest], function(x){
