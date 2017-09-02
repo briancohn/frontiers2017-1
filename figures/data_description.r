@@ -176,19 +176,18 @@ sd_of_last_n_observations <- function(forces,indices_of_interest,n=100, force_co
 return(sd_for_last_n_obs)
 }
 
-norm(list(wrench_observation_df[,1], wrench_observation_df[,2], wrench_observation_df[,3]))
-
 plot_porcupine_of_endpoint_wrenches <- function(forces) {
   wrench_observation_df <- do.call('rbind', forces)
-  browser()
+  
   force_ranges <- apply(wrench_observation_df,2,range)
   par(mfrow=c(2,1))
+  require(scatterplot3d)
   scatterplot3d(wrench_observation_df[,1], wrench_observation_df[,2], wrench_observation_df[,3], pch=16, 
                 xlim = force_ranges[,1],
                 ylim = force_ranges[,2],
                 zlim = force_ranges[,3],
                 xlab= "Fx", ylab="Fy",zlab="Fz" , highlight.3d=TRUE,
-                               type="h", main="Recorded output forces")
+                type="h", main="Recorded output forces")
   
   scatterplot3d(wrench_observation_df[,4], wrench_observation_df[,5], wrench_observation_df[,6], pch=16, 
                 xlim = force_ranges[,4],
@@ -197,7 +196,22 @@ plot_porcupine_of_endpoint_wrenches <- function(forces) {
                 xlab= "Mx", ylab="My",zlab="Mz" ,highlight.3d=TRUE,
                 type="h", main="Recorded output moments")
   
+
+  bluefunc <- colorRampPalette(c("lightblue", "darkblue"))
   
+  color.gradient <- function(x, colors=c("blue","yellow"), colsteps=100) {
+    return( colorRampPalette(colors) (colsteps) [ findInterval(x, seq(min(x), max(x), length.out=colsteps)) ] )
+  }
+  gradient_colors = c("blue","yellow")
+  z_colors <- color.gradient(wrench_observation_df[,3], gradient_colors)
+  z_range <- range(wrench_observation_df[,3])
+  plot(wrench_observation_df[,1],wrench_observation_df[,2], xlim=c(force_ranges[1,1], 0), col=z_colors,asp=1, xlab="Fx", ylab="Fy")
+  origin_points <- rep(0,length(forces))
+  segments(origin_points,origin_points, wrench_observation_df[,1], wrench_observation_df[,2],col=z_colors)
+  # Illustrate the gradient's relationship to the scale
+  legend_image <- as.raster(matrix(colorRampPalette(gradient_colors) (10), ncol=1))
+  text(x=-0.5, y = seq(0,1,l=5), labels = seq(z_range[1],z_range[2],l=10))
+  browser()
 }
 
 data_description_analysis <- function(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest){
