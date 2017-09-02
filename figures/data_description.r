@@ -115,46 +115,28 @@ generate_parcoord_plot <- function(dataframe_of_observations){
 
 
 norm_vec <- function(x) sqrt(sum(x^2))
-plot_JR3_endpoint_force_vectors <- function(list_of_4_wrenches, list_of_SD_for_4_wrenches, xlim=c(-5,5), ylim=c(-5,5)) {
-  wrench_a <- list_of_4_wrenches[[1]]
-  wrench_b <- list_of_4_wrenches[[2]]
-  wrench_c <- list_of_4_wrenches[[3]]
-  wrench_d <- list_of_4_wrenches[[4]]
-  
-  wrench_a_SD <- list_of_SD_for_4_wrenches[[1]]
-  wrench_b_SD <- list_of_SD_for_4_wrenches[[2]]
-  wrench_c_SD <- list_of_SD_for_4_wrenches[[3]]
-  wrench_d_SD <- list_of_SD_for_4_wrenches[[4]]
-  
-  
-  par(mfrow=c(1,4))
-  
-  plot(NA, xlim=xlim, ylim=ylim, main=paste("Norm of w_a = ", norm_vec(wrench_a)), xlab=paste("Fx is ", wrench_a[1]), ylab=paste("Fy is ", wrench_a[2]), asp=1)
-  segments(0,0,wrench_a[1], wrench_a[2])
-  plot_wrench_text(wrench_a)
-  plot_wrench_SD_text(wrench_a_SD)
-  
-  plot(NA, xlim=xlim, ylim=ylim, main=paste("Norm of w_b = ", norm_vec(wrench_b)), xlab=paste("Fx is ", wrench_b[1]), ylab=paste("Fy is ", wrench_b[2]), asp=1)
-  segments(0,0,wrench_b[1], wrench_b[2]) 
-  plot_wrench_text(wrench_b)
-  plot_wrench_SD_text(wrench_b_SD)
-  
-  plot(NA, xlim=xlim, ylim=ylim, main=paste("Norm of w_b = ", norm_vec(wrench_c)), xlab=paste("Fx is ", wrench_c[1]), ylab=paste("Fy is ", wrench_c[2]), asp=1)
-  segments(0,0,wrench_c[1], wrench_c[2]) 
-  plot_wrench_text(wrench_c)
-  plot_wrench_SD_text(wrench_c_SD)
-  
-  plot(NA, xlim=xlim, ylim=ylim, main=paste("Norm of w_b = ", norm_vec(wrench_c)), xlab=paste("Fx is ", wrench_c[1]), ylab=paste("Fy is ", wrench_c[2]), asp=1)
-  segments(0,0,wrench_d[1], wrench_d[2]) 
-  plot_wrench_text(wrench_d)
-  plot_wrench_SD_text(wrench_d_SD)
+
+plot_output_wrench_FX_FY <- function(wrench, wrench_SD, xlim, ylim) {
+  plot(NA, xlim=xlim, ylim=ylim, main=paste("Norm of w = ", norm_vec(wrench)), xlab=paste("Fx is ", wrench[1]), ylab=paste("Fy is ", wrench[2]), asp=1)
+  segments(0,0,wrench[1], wrench[2])
+  plot_wrench_text(wrench)
+  plot_wrench_SD_text(wrench_SD)
+}
+
+plot_JR3_endpoint_force_vectors <- function(list_of_wrenches, list_of_SD_for_wrenches, xlim=c(-5,5), ylim=c(-5,5)) {
+  num_wrenches <- length(list_of_wrenches)
+  par(mfrow=c(1,num_wrenches))
+  lapply(1:num_wrenches, function(x){
+    plot_output_wrench_FX_FY(list_of_wrenches[[x]], list_of_SD_for_wrenches[[x]], xlim,ylim)
+  })
+  par(mfrow=c(1,1))
 }
 
 
 
 
-data_description_analysis <- function(first_data_chunk, minimum_tendon_force, maximum_tendon_force){
-  indices_of_interest <- 5:8
+data_description_analysis <- function(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest){
+
   
   # Prep data for parcoord
   force_samples <- first_data_chunk[first_data_chunk$reference_M0==unique(first_data_chunk$reference_M0)[indices_of_interest],]
@@ -162,8 +144,9 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   
   postures <- split_by_position(first_data_chunk$adept_x, first_data_chunk)
   forces <- unlist(lapply(postures, split_by_reference_force), recursive=FALSE)
-  
+  par(mfrow=c(1,1))
   plot(plot_muscle_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest))
+  par(mfrow=c(1,1))
   plot(plot_JR3_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force))
   
   #Get the mean of the last 100 force values for each of the force signals, for the 5th through 8th muscle activation patterns.
@@ -179,9 +162,9 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   })
   
   
-  list_of_4_wrenches <- lapply(list_of_tail_wrench_mean, as.numeric)
-  list_of_SD_for_4_wrenches <- lapply(list_of_tail_wrench_SD, as.numeric)
-  plot_JR3_endpoint_force_vectors(list_of_4_wrenches, list_of_SD_for_4_wrenches)
+  list_of_wrenches <- lapply(list_of_tail_wrench_mean, as.numeric)
+  list_of_SD_for_wrenches <- lapply(list_of_tail_wrench_SD, as.numeric)
+  plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches)
 
 }
 
