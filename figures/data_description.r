@@ -178,7 +178,6 @@ return(sd_for_last_n_obs)
 
 plot_porcupine_of_endpoint_wrenches <- function(forces) {
   wrench_observation_df <- do.call('rbind', forces)
-  
   force_ranges <- apply(wrench_observation_df,2,range)
   par(mfrow=c(2,1))
   require(scatterplot3d)
@@ -196,24 +195,26 @@ plot_porcupine_of_endpoint_wrenches <- function(forces) {
                 xlab= "Mx", ylab="My",zlab="Mz" ,highlight.3d=TRUE,
                 type="h", main="Recorded output moments")
   
-
-  bluefunc <- colorRampPalette(c("lightblue", "darkblue"))
-  
+  par(mfrow=c(1,1))
   color.gradient <- function(x, colors=c("blue","yellow"), colsteps=100) {
     return( colorRampPalette(colors) (colsteps) [ findInterval(x, seq(min(x), max(x), length.out=colsteps)) ] )
   }
   gradient_colors = c("blue","yellow")
   z_colors <- color.gradient(wrench_observation_df[,3], gradient_colors)
   z_range <- range(wrench_observation_df[,3])
-  plot(wrench_observation_df[,1],wrench_observation_df[,2], xlim=c(force_ranges[1,1], 0), col=z_colors,asp=1, xlab="Fx", ylab="Fy")
+  z_range_distance <- z_range[2]-z_range[1]
+  z_range_midpoint <- z_range_distance/2 + z_range[1]
+  plot(1,type='n', xlim=c(force_ranges[1,1], 0), ylim=c(-3,3), asp=1, xlab="Fx", ylab="Fy", main=paste("n = ", length(forces)))
   origin_points <- rep(0,length(forces))
   segments(origin_points,origin_points, wrench_observation_df[,1], wrench_observation_df[,2],col=z_colors)
+  points(wrench_observation_df[,1],wrench_observation_df[,2], xlim=c(force_ranges[1,1], 0), ylim=c(-3,3), col=z_colors, asp=1, xlab="Fx", ylab="Fy", main=paste("n = ", length(forces)))
+  
+
   # Illustrate the gradient's relationship to the scale
   legend_image <- as.raster(matrix(colorRampPalette(gradient_colors) (100), ncol=1))
-  values_to_label_on_legend <- seq(0,1,l=6)
-  text(x=-1, y = 2*values_to_label_on_legend + 1, labels = values_to_label_on_legend)
-  rasterImage(legend_image, -0.5, 1, -0.1,3)
-  browser()
+  values_to_label_on_legend <- seq(z_range[1],z_range[2],l=6)
+  rasterImage(legend_image, -1.5, 1, -1,3)
+  text(x=-1, y = seq(1,3,l=length(values_to_label_on_legend)), labels = signif(values_to_label_on_legend,3), adj = c(0, 0.5))
 }
 
 data_description_analysis <- function(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest){
@@ -251,11 +252,13 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   #either take 0 or the rightmost circle edgepoint.
   xlim[2] = max(c(xlim[2] + max(abs(zlim)), 0))
   
+  plot_force_trial_elapsed_time_distribution(forces)
   plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches, xlim, ylim, zlim)
-  
   force_extended_list <- list_of_mean_of_last_n_observations(forces,indices_of_interest=1:length(forces)-1, n=100,force_column_names)
   plot_porcupine_of_endpoint_wrenches(force_extended_list)
 }
-
+plot_force_trial_elapsed_time_distribution <- function(forces){
+  hist(do.call('c',lapply(forces[1:100], function(x) length(x[,1]))), breaks=10, xlab="Time per force trial (ms)", ylab="Number of force trials", main="Force trial length histogram (count)", col='#000000')  
+}
 
 
