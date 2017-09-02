@@ -118,12 +118,27 @@ generate_parcoord_plot <- function(dataframe_of_observations){
 
 norm_vec <- function(x) sqrt(sum(x^2))
 
-plot_output_wrench_FX_FY <- function(wrench, wrench_SD, xlim, ylim) {
+plot_output_wrench_FX_FY <- function(wrench, wrench_sd, xlim, ylim) {
   plot(NA, xlim=xlim, ylim=ylim, main=paste("Norm of w = ", norm_vec(wrench)), xlab=paste("Fx is ", wrench[1]), ylab=paste("Fy is ", wrench[2]), asp=1)
-  segments(0,0,wrench[1], wrench[2])
+  x = wrench[1]
+  y = wrench[2]
+  x_sd = wrench_sd[1]
+  y_sd = wrench_sd[2]
+  segments(0,0,x,y)
   plot_wrench_text(wrench)
-  plot_wrench_SD_text(wrench_SD)
+  plot_wrench_SD_text(wrench_sd)
+  #draw_SD_ellipse_at_end_of_vector(x,y,x_sd,y_sd)
+  #vertical for x SD
+  arrows(x, y-y_sd, x, y+y_sd, length=0.05, angle=90, code=3)
+  #horizontal for y SD
+  arrows(x-x_sd, y, x+x_sd, y, length=0.05, angle=90, code=3)
 }
+
+draw_SD_ellipse_at_end_of_vector <- function(x,y,x_sd,y_sd){
+  require(car)
+  ellipse(c(x,y), 5*matrix(c(x_sd,0,0,y_sd), nrow=2, ncol=2),1)
+}
+
 
 plot_JR3_endpoint_force_vectors <- function(list_of_wrenches, list_of_SD_for_wrenches, xlim=c(-5,5), ylim=c(-5,5)) {
   num_wrenches <- length(list_of_wrenches)
@@ -167,7 +182,7 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   list_of_wrenches <- lapply(list_of_tail_wrench_mean, as.numeric)
   list_of_SD_for_wrenches <- lapply(list_of_tail_wrench_SD, as.numeric)
   plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches)
-
+  #plot_porcupine_of_endpoint_wrenches(longer_list_of_wrenches)
 }
 
 
