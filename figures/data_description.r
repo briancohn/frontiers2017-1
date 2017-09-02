@@ -209,8 +209,10 @@ plot_porcupine_of_endpoint_wrenches <- function(forces) {
   origin_points <- rep(0,length(forces))
   segments(origin_points,origin_points, wrench_observation_df[,1], wrench_observation_df[,2],col=z_colors)
   # Illustrate the gradient's relationship to the scale
-  legend_image <- as.raster(matrix(colorRampPalette(gradient_colors) (10), ncol=1))
-  text(x=-0.5, y = seq(0,1,l=5), labels = seq(z_range[1],z_range[2],l=10))
+  legend_image <- as.raster(matrix(colorRampPalette(gradient_colors) (100), ncol=1))
+  values_to_label_on_legend <- seq(0,1,l=6)
+  text(x=-1, y = 2*values_to_label_on_legend + 1, labels = values_to_label_on_legend)
+  rasterImage(legend_image, -0.5, 1, -0.1,3)
   browser()
 }
 
