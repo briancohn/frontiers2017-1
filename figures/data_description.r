@@ -157,21 +157,24 @@ plot_JR3_endpoint_force_vectors <- function(list_of_wrenches, list_of_SD_for_wre
 
 
 data_description_analysis <- function(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest){
-
-  
-  # Prep data for parcoord
- 
-  
   postures <- split_by_position(first_data_chunk$adept_x, first_data_chunk)
   forces <- unlist(lapply(postures, split_by_reference_force), recursive=FALSE)
+  
+  #Parcoord - muscle activation patterns
   muscle_activation_patterns <- do.call('rbind', lapply(forces[indices_of_interest], compose_dataframe_of_muscle_activation_patterns))
   row.names(muscle_activation_patterns) <- LETTERS[1:length(indices_of_interest)]
   p <- generate_parcoord_plot(muscle_activation_patterns)
   plot(p)
+  
+  #Implemented Tensions
   par(mfrow=c(1,1))
   plot(plot_muscle_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest))
+  
+  # Resultant Wrenches over time
   par(mfrow=c(1,1))
   plot(plot_JR3_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest))
+  
+  #Visualization of output Wrenches
   
   #Get the mean of the last 100 force values for each of the force signals, for the 5th through 8th muscle activation patterns.
   list_of_tail_wrench_mean <- lapply(forces[indices_of_interest], function(x){
