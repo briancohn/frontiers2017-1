@@ -153,8 +153,52 @@ plot_JR3_endpoint_force_vectors <- function(list_of_wrenches, list_of_SD_for_wre
   par(mfrow=c(1,1))
 }
 
+#Get the mean of the last n force values for each of the force signals, for the list elements specified by the indices_of_interest
+# forces is a list of ramp&hold time series dataframes
+# force_column_names is a vecotr of character strings relating to the columns of forces[[i]] that contain force recordings
+list_of_mean_of_last_n_observations <- function(forces, indices_of_interest, n,force_column_names) {
+  list_of_tail_wrench_means <- lapply(forces[indices_of_interest], function(x){
+    colMeans(
+      tail(x[force_column_names],100)
+    )
+  })
+  return(list_of_tail_wrench_means)
+}
+#Get the SD of the last n force values for each of the force signals, for the list elements specified by the indices_of_interest
+# forces is a list of ramp&hold time series dataframes
+# force_column_names is a vecotr of character strings relating to the columns of forces[[i]] that contain force recordings
+sd_of_last_n_observations <- function(forces,indices_of_interest,n=100, force_column_names) {
+  sd_for_last_n_obs <- lapply(forces[indices_of_interest], function(x) {
+    apply(
+      tail(x[force_column_names],n)
+      , 2, sd)
+  })
+return(sd_for_last_n_obs)
+}
 
+norm(list(wrench_observation_df[,1], wrench_observation_df[,2], wrench_observation_df[,3]))
 
+plot_porcupine_of_endpoint_wrenches <- function(forces) {
+  wrench_observation_df <- do.call('rbind', forces)
+  browser()
+  force_ranges <- apply(wrench_observation_df,2,range)
+  par(mfrow=c(2,1))
+  scatterplot3d(wrench_observation_df[,1], wrench_observation_df[,2], wrench_observation_df[,3], pch=16, 
+                xlim = force_ranges[,1],
+                ylim = force_ranges[,2],
+                zlim = force_ranges[,3],
+                xlab= "Fx", ylab="Fy",zlab="Fz" , highlight.3d=TRUE,
+                               type="h", main="Recorded output forces")
+  
+  scatterplot3d(wrench_observation_df[,4], wrench_observation_df[,5], wrench_observation_df[,6], pch=16, 
+                xlim = force_ranges[,4],
+                ylim = force_ranges[,5],
+                zlim = force_ranges[,6],
+                xlab= "Mx", ylab="My",zlab="Mz" ,highlight.3d=TRUE,
+                type="h", main="Recorded output moments")
+  
+  
+}
 
 data_description_analysis <- function(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest){
   postures <- split_by_position(first_data_chunk$adept_x, first_data_chunk)
@@ -173,22 +217,12 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   # Resultant Wrenches over time
   par(mfrow=c(1,1))
   plot(plot_JR3_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest))
-  
+
   #Visualization of output Wrenches
+  list_of_tail_wrench_mean <- list_of_mean_of_last_n_observations(forces, indices_of_interest, n=100, force_column_names)
+  list_of_tail_wrench_SD <- sd_of_last_n_observations(forces,indices_of_interest,n=100, force_column_names)
   
-  #Get the mean of the last 100 force values for each of the force signals, for the 5th through 8th muscle activation patterns.
-  list_of_tail_wrench_mean <- lapply(forces[indices_of_interest], function(x){
-                                                                colMeans(
-                                                                  tail(x[force_column_names],100)
-                                                                  )
-                                                              })
-  list_of_tail_wrench_SD <- lapply(forces[indices_of_interest], function(x) {
-    apply(
-      tail(x[force_column_names],100)
-      , 2, sd)
-  })
-  
-  
+
   list_of_wrenches <- lapply(list_of_tail_wrench_mean, as.numeric)
   list_of_SD_for_wrenches <- lapply(list_of_tail_wrench_SD, as.numeric)
   
@@ -202,7 +236,9 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   xlim[2] = max(c(xlim[2] + max(abs(zlim)), 0))
   
   plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches, xlim, ylim, zlim)
-  #plot_porcupine_of_endpoint_wrenches(longer_list_of_wrenches)
+  
+  force_extended_list <- list_of_mean_of_last_n_observations(forces,indices_of_interest=1:length(forces)-1, n=100,force_column_names)
+  plot_porcupine_of_endpoint_wrenches(force_extended_list)
 }
 
 
