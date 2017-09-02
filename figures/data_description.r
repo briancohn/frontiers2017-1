@@ -133,14 +133,14 @@ plot_output_wrench_FX_FY <- function(wrench, wrench_sd, xlim, ylim) {
 }
 
 draw_circle_at_end_of_vector <- function(x,y,diameter){
-  require(car)
   if (diameter>0) {
     circle_color = "green"
     diameter <- abs(diameter)
   } else {
     circle_color = "black"
   }
-  ellipse(c(x,y), diameter*0.5*matrix(c(1,0,0,1), nrow=2, ncol=2),1, col= circle_color)
+  require(plotrix)
+  draw.circle(x,y,diameter,border="black",col=circle_color, lty=1,lwd=1)
 }
 
 
