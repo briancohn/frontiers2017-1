@@ -60,7 +60,7 @@ wrench_vector_to_labeled_vals <- function(wrench_vector){
 }
 
 
-compose_dataframe_of_first_three_muscle_activation_patterns <- function(forces){
+compose_dataframe_of_muscle_activation_patterns <- function(forces){
   muscle_activation_patterns <- rbind(
     unique(forces$reference_M0),
     unique(forces$reference_M1),
@@ -122,25 +122,29 @@ plot_output_wrench_FX_FY <- function(wrench, wrench_sd, xlim, ylim) {
   plot(NA, xlim=xlim, ylim=ylim, main=paste("Norm of w = ", norm_vec(wrench)), xlab=paste("Fx is ", wrench[1]), ylab=paste("Fy is ", wrench[2]), asp=1)
   x = wrench[1]
   y = wrench[2]
+  z = wrench[3]
   x_sd = wrench_sd[1]
   y_sd = wrench_sd[2]
+  z_sd = wrench_sd[3] #unused as of yet
   segments(0,0,x,y)
   plot_wrench_text(wrench)
   plot_wrench_SD_text(wrench_sd)
-  #draw_SD_ellipse_at_end_of_vector(x,y,x_sd,y_sd)
-  #vertical for x SD
-  arrows(x, y-y_sd, x, y+y_sd, length=0.05, angle=90, code=3)
-  #horizontal for y SD
-  arrows(x-x_sd, y, x+x_sd, y, length=0.05, angle=90, code=3)
+  draw_circle_at_end_of_vector(x,y,z)
 }
 
-draw_SD_ellipse_at_end_of_vector <- function(x,y,x_sd,y_sd){
+draw_circle_at_end_of_vector <- function(x,y,diameter){
   require(car)
-  ellipse(c(x,y), 5*matrix(c(x_sd,0,0,y_sd), nrow=2, ncol=2),1)
+  if (diameter>0) {
+    circle_color = "green"
+    diameter <- abs(diameter)
+  } else {
+    circle_color = "black"
+  }
+  ellipse(c(x,y), diameter*0.5*matrix(c(1,0,0,1), nrow=2, ncol=2),1, col= circle_color)
 }
 
 
-plot_JR3_endpoint_force_vectors <- function(list_of_wrenches, list_of_SD_for_wrenches, xlim=c(-5,5), ylim=c(-5,5)) {
+plot_JR3_endpoint_force_vectors <- function(list_of_wrenches, list_of_SD_for_wrenches, xlim=c(-5,5), ylim=c(-5,5), zlim=c(-5,5)) {
   num_wrenches <- length(list_of_wrenches)
   par(mfrow=c(1,num_wrenches))
   lapply(1:num_wrenches, function(x){
@@ -156,11 +160,14 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
 
   
   # Prep data for parcoord
-  force_samples <- first_data_chunk[first_data_chunk$reference_M0==unique(first_data_chunk$reference_M0)[indices_of_interest],]
-  plot(generate_parcoord_plot(compose_dataframe_of_first_three_muscle_activation_patterns(force_samples)))
+ 
   
   postures <- split_by_position(first_data_chunk$adept_x, first_data_chunk)
   forces <- unlist(lapply(postures, split_by_reference_force), recursive=FALSE)
+  muscle_activation_patterns <- do.call('rbind', lapply(forces[indices_of_interest], compose_dataframe_of_muscle_activation_patterns))
+  row.names(muscle_activation_patterns) <- LETTERS[1:length(indices_of_interest)]
+  p <- generate_parcoord_plot(muscle_activation_patterns)
+  plot(p)
   par(mfrow=c(1,1))
   plot(plot_muscle_forces_over_time(forces, minimum_tendon_force, maximum_tendon_force, indices_of_interest))
   par(mfrow=c(1,1))
@@ -181,7 +188,17 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   
   list_of_wrenches <- lapply(list_of_tail_wrench_mean, as.numeric)
   list_of_SD_for_wrenches <- lapply(list_of_tail_wrench_SD, as.numeric)
-  plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches)
+  
+  
+  xlim = range(lapply(list_of_wrenches, function(x){x[1]}))
+  ylim = range(lapply(list_of_wrenches, function(x){x[2]}))
+  zlim = range(lapply(list_of_wrenches, function(x){x[3]}))
+  #don't let the circle get out of the box
+  xlim[1] = xlim[1] - max(abs(zlim))
+  #either take 0 or the rightmost circle edgepoint.
+  xlim[2] = max(c(xlim[2] + max(abs(zlim)), 0))
+  
+  plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches, xlim, ylim, zlim)
   #plot_porcupine_of_endpoint_wrenches(longer_list_of_wrenches)
 }
 

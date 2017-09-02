@@ -8,6 +8,6 @@ data_location <- "/Users/briancohn/Resilio Sync/data/realTimeData2017_08_16_13_2
   
 # Only take first part of data to create data description figure. (60e3 = first 60 seconds)
 first_data_chunk <- read.csv(data_location, nrows=60e3, header=TRUE)
-pdf("file1.pdf", width=60, height=60)
-data_description_analysis(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest=1:20)
+pdf("file1.pdf", width=8, height=11)
+data_description_analysis(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest=2:5)
 dev.off()
