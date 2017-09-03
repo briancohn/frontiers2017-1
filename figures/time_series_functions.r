@@ -187,10 +187,18 @@ split_by_position <- function(vector_of_positions, time_series_dataframe){
 	return(data_split[2:length(data_split)])
 }
 
+# not in function pulled via https://stackoverflow.com/questions/5831794/opposite-of-in
+`%not in%` <- function (x, table) is.na(match(x, table, nomatch=NA_integer_))
+
 #make sure col is named reference_M0
+# robotflag			int
+#0 means initialized, 1 means moving, 2 means ready
+#motorflag			int
+#0 means initialized, 1 means it’s applying the force,2 means ready.
+
 split_by_reference_force <- function(time_series_dataframe) {
 	forces <- unique(time_series_dataframe$reference_M0)
-	forces <- forces[-1] #remove the nullification force before we changed to a new posture
+	forces <- forces[-2] #remove the nullification force before we changed to a new posture, and the intra-transition data
 	list_of_ts_for_diff_forces <- lapply(forces, function(force_m0){
 		time_series_dataframe[time_series_dataframe$reference_M0==force_m0,]
 		})

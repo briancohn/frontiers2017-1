@@ -251,14 +251,16 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   xlim[1] = xlim[1] - max(abs(zlim))
   #either take 0 or the rightmost circle edgepoint.
   xlim[2] = max(c(xlim[2] + max(abs(zlim)), 0))
-  
-  plot_force_trial_elapsed_time_distribution(forces)
+  elapsed_trial_times <- plot_force_trial_elapsed_time_distribution(forces)
+  browser()
   plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches, xlim, ylim, zlim)
-  force_extended_list <- list_of_mean_of_last_n_observations(forces,indices_of_interest=1:length(forces)-1, n=100,force_column_names)
+  force_extended_list <- list_of_mean_of_last_n_observations(forces,indices_of_interest=1:length(forces), n=100,force_column_names)
   plot_porcupine_of_endpoint_wrenches(force_extended_list)
 }
 plot_force_trial_elapsed_time_distribution <- function(forces){
-  hist(do.call('c',lapply(forces[1:100], function(x) length(x[,1]))), breaks=10, xlab="Time per force trial (ms)", ylab="Number of force trials", main="Force trial length histogram (count)", col='#000000')  
+  vector_of_times <- do.call('c',lapply(forces, function(x) length(x[,1])))
+  hist(vector_of_times, breaks=10, xlab="Time per force trial (ms)", ylab="Number of force trials", main="Force trial length histogram (count)", col='#000000')  
+  return(vector_of_times)
 }
 
 
