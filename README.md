@@ -5,6 +5,11 @@
 brew install postgresql
 ```
 
+
+Put dataset on the EC2 Server:
+```
+scp -c blowfish ~/Resilio\ Sync/data/realTimeData2017_08_16_13_23_42.txt ubuntu@ec2-54-215-246-21.us-west-1.compute.amazonaws.com:/home/ubuntu/data/realTimeData2017_08_16_13_23_42.txt
+```
 # TODO
 pick suggested reviewers
 
