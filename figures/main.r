@@ -2,6 +2,7 @@ setwd('~/Documents/GitHub/bc/frontiers2017/figures')
 source('data_description.r')
 source('time_series_functions.r')
 source('functions_specific_to_frontiers2017_dataset.r')
+source('settling_time_analysis.r')
 
 # Define parameters for analysis
 muscle_names = c("M0", "M1", "M2","M3","M4","M5","M6")
@@ -20,3 +21,5 @@ save_snapshot_for_first_posture(raw_data_timeseries_df=first_data_chunk)
 pdf("data_description_analysis.pdf", width=14.0, height=10)
   data_description_analysis(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest=2:5)
 dev.off()
+
+settling_time_analysis(data_location)
