@@ -17,10 +17,6 @@ first_data_chunk <- read.csv(data_location, nrows=85e3, header=TRUE)
 #Save snapshot of just first posture
 save_snapshot_for_first_posture(raw_data_timeseries_df=first_data_chunk)
 
-
-
-
-
 pdf("data_description_analysis.pdf", width=14.0, height=10)
   data_description_analysis(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest=2:5)
 dev.off()
