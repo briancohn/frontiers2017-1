@@ -77,15 +77,15 @@ compose_dataframe_of_muscle_activation_patterns <- function(forces){
 }
 
 
-plot_wrench_text <- function(wrench, x=0,y=-10, add_SD=FALSE){
+plot_wrench_text <- function(wrench, x=-2,y=-5, add_SD=FALSE){
   wrench_text <- wrench_vector_to_labeled_vals(wrench)
   if (add_SD){
     wrench_text <- paste("SD :", wrench_text)
   }
-  text(x,y, wrench_text, cex=0.70)
+  text(x,y, wrench_text, cex=0.20)
 }
 
-plot_wrench_SD_text <- function(wrench_SD_vector, x=0,y=10){
+plot_wrench_SD_text <- function(wrench_SD_vector, x=-2,y=5){
   plot_wrench_text(wrench_SD_vector, x, y, add_SD=TRUE)
 }
 
@@ -177,10 +177,11 @@ return(sd_for_last_n_obs)
 }
 
 plot_porcupine_of_endpoint_wrenches <- function(forces) {
-  wrench_observation_df <- do.call('rbind', forces)
+  wrench_observation_df <- do.call('rbind', forces) #only grab the first posture
   force_ranges <- apply(wrench_observation_df,2,range)
   par(mfrow=c(2,1))
   require(scatterplot3d)
+
   scatterplot3d(wrench_observation_df[,1], wrench_observation_df[,2], wrench_observation_df[,3], pch=16, 
                 xlim = force_ranges[,1],
                 ylim = force_ranges[,2],
@@ -209,14 +210,20 @@ plot_porcupine_of_endpoint_wrenches <- function(forces) {
   segments(origin_points,origin_points, wrench_observation_df[,1], wrench_observation_df[,2],col=z_colors)
   points(wrench_observation_df[,1],wrench_observation_df[,2], xlim=c(force_ranges[1,1], 0), ylim=c(-3,3), col=z_colors, asp=1, xlab="Fx", ylab="Fy", main=paste("n = ", length(forces)))
   
-
   # Illustrate the gradient's relationship to the scale
   legend_image <- as.raster(matrix(colorRampPalette(gradient_colors) (100), ncol=1))
   values_to_label_on_legend <- seq(z_range[1],z_range[2],l=6)
   rasterImage(legend_image, -1.5, 1, -1,3)
   text(x=-1, y = seq(1,3,l=length(values_to_label_on_legend)), labels = signif(values_to_label_on_legend,3), adj = c(0, 0.5))
 }
-
+force_ts_len_is_acceptable <- function(force_time_series, desired_ms = 800, max_delta_acceptable=50){
+  observed_ms <- length(force_time_series[,1])
+  if ((abs(observed_ms - desired_ms)) < max_delta_acceptable){ 
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
 data_description_analysis <- function(first_data_chunk, minimum_tendon_force, maximum_tendon_force, indices_of_interest){
   postures <- split_by_position(first_data_chunk$adept_x, first_data_chunk)
   forces <- unlist(lapply(postures, split_by_reference_force), recursive=FALSE)
@@ -251,11 +258,18 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   xlim[1] = xlim[1] - max(abs(zlim))
   #either take 0 or the rightmost circle edgepoint.
   xlim[2] = max(c(xlim[2] + max(abs(zlim)), 0))
-  elapsed_trial_times <- plot_force_trial_elapsed_time_distribution(forces)
-  browser()
+  
+
+  
   plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches, xlim, ylim, zlim)
+  indices_of_correctly_lengthed_forces <- which(lapply(forces, force_ts_len_is_acceptable) == TRUE)
   force_extended_list <- list_of_mean_of_last_n_observations(forces,indices_of_interest=1:length(forces), n=100,force_column_names)
-  plot_porcupine_of_endpoint_wrenches(force_extended_list)
+  posture_1_viable_forces <- force_extended_list[indices_of_correctly_lengthed_forces]
+  plot_porcupine_of_endpoint_wrenches(posture_1_viable_forces)
+  
+  # how long do trials take?
+  elapsed_trial_times <- plot_force_trial_elapsed_time_distribution(forces[indices_of_correctly_lengthed_forces])
+
 }
 plot_force_trial_elapsed_time_distribution <- function(forces){
   vector_of_times <- do.call('c',lapply(forces, function(x) length(x[,1])))
