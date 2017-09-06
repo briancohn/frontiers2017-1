@@ -1,8 +1,6 @@
 library(ggplot2)
 
-plotting_specifics_for_force_control <- function(forces,
-                                                 ylim,
-                                                 ticks){
+plotting_specifics_for_force_control <- function(forces, ylim, ticks){
   plot.new()
   plot.window(xlim=range(ticks),ylim=ylim)
   axis(1, at = ticks)
@@ -246,10 +244,8 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   list_of_tail_wrench_mean <- list_of_mean_of_last_n_observations(forces, indices_of_interest, n=100, force_column_names)
   list_of_tail_wrench_SD <- sd_of_last_n_observations(forces,indices_of_interest,n=100, force_column_names)
   
-
   list_of_wrenches <- lapply(list_of_tail_wrench_mean, as.numeric)
   list_of_SD_for_wrenches <- lapply(list_of_tail_wrench_SD, as.numeric)
-  
   
   xlim = range(lapply(list_of_wrenches, function(x){x[1]}))
   ylim = range(lapply(list_of_wrenches, function(x){x[2]}))
@@ -258,18 +254,17 @@ data_description_analysis <- function(first_data_chunk, minimum_tendon_force, ma
   xlim[1] = xlim[1] - max(abs(zlim))
   #either take 0 or the rightmost circle edgepoint.
   xlim[2] = max(c(xlim[2] + max(abs(zlim)), 0))
-  
 
-  
+  #Show 3D endpoint vectors for a couple postures as a sanity check
   plot_JR3_endpoint_force_vectors(list_of_wrenches, list_of_SD_for_wrenches, xlim, ylim, zlim)
   indices_of_correctly_lengthed_forces <- which(lapply(forces, force_ts_len_is_acceptable) == TRUE)
+  
   force_extended_list <- list_of_mean_of_last_n_observations(forces,indices_of_interest=1:length(forces), n=100,force_column_names)
   posture_1_viable_forces <- force_extended_list[indices_of_correctly_lengthed_forces]
   plot_porcupine_of_endpoint_wrenches(posture_1_viable_forces)
   
-  # how long do trials take?
+  # How long do trials take?
   elapsed_trial_times <- plot_force_trial_elapsed_time_distribution(forces[indices_of_correctly_lengthed_forces])
-
 }
 plot_force_trial_elapsed_time_distribution <- function(forces){
   vector_of_times <- do.call('c',lapply(forces, function(x) length(x[,1])))
