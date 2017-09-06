@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  2 SEP 2017 00:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  5 SEP 2017 21:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1005,10 +1005,10 @@ No file frontiers.bbl.
 File: figures/overview/overview.jpg Graphic file (type jpg)
 
 <use figures/overview/overview.jpg>
-Package pdftex.def Info: figures/overview/overview.jpg used on input line 113.
+Package pdftex.def Info: figures/overview/overview.jpg used on input line 121.
 (pdftex.def)             Requested size: 497.92322pt x 373.07275pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 115.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 123.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -1019,11 +1019,11 @@ t>
 File: figures/data_description/data_description.jpg Graphic file (type jpg)
  <use figures/data_description/data_description.jpg>
 Package pdftex.def Info: figures/data_description/data_description.jpg used on 
-input line 121.
+input line 129.
 (pdftex.def)             Requested size: 497.92322pt x 671.48218pt.
 
 
-LaTeX Warning: Float too large for page by 44.08008pt on input line 125.
+LaTeX Warning: Float too large for page by 44.08008pt on input line 133.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -1036,7 +1036,7 @@ File: figures/rise_time_and_delta_activation/rise_time_and_delta_activation.jpg
 
 <use figures/rise_time_and_delta_activation/rise_time_and_delta_activation.jpg>
 Package pdftex.def Info: figures/rise_time_and_delta_activation/rise_time_and_d
-elta_activation.jpg used on input line 129.
+elta_activation.jpg used on input line 137.
 (pdftex.def)             Requested size: 497.92322pt x 543.72136pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -1047,7 +1047,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: figures/creating_A_matrix/creating_A_matrix.jpg Graphic file (type jpg)
  <use figures/creating_A_matrix/creating_A_matrix.jpg>
 Package pdftex.def Info: figures/creating_A_matrix/creating_A_matrix.jpg used o
-n input line 139.
+n input line 147.
 (pdftex.def)             Requested size: 497.92322pt x 637.03868pt.
 
 
@@ -1057,7 +1057,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: figures/model_fit/model_fit.jpg Graphic file (type jpg)
 
 <use figures/model_fit/model_fit.jpg>
-Package pdftex.def Info: figures/model_fit/model_fit.jpg used on input line 147
+Package pdftex.def Info: figures/model_fit/model_fit.jpg used on input line 155
 .
 (pdftex.def)             Requested size: 497.92322pt x 477.9092pt.
 
@@ -1071,11 +1071,11 @@ File: figures/muscle_force_coherence/muscle_force_coherence.jpg Graphic file (t
 ype jpg)
  <use figures/muscle_force_coherence/muscle_force_coherence.jpg>
 Package pdftex.def Info: figures/muscle_force_coherence/muscle_force_coherence.
-jpg used on input line 155.
+jpg used on input line 163.
 (pdftex.def)             Requested size: 497.92322pt x 650.77489pt.
 
 
-LaTeX Warning: Float too large for page by 8.94276pt on input line 159.
+LaTeX Warning: Float too large for page by 8.94276pt on input line 167.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -1088,7 +1088,7 @@ File: figures/responsibility_of_a_muscle/responsibility_of_a_muscle.jpg Graphic
 
 <use figures/responsibility_of_a_muscle/responsibility_of_a_muscle.jpg>
 Package pdftex.def Info: figures/responsibility_of_a_muscle/responsibility_of_a
-_muscle.jpg used on input line 164.
+_muscle.jpg used on input line 172.
 (pdftex.def)             Requested size: 497.92322pt x 587.34009pt.
 
 
@@ -1101,7 +1101,7 @@ File: figures/dynamics_vs_statics/dynamics_vs_statics.jpg Graphic file (type jp
 g)
  <use figures/dynamics_vs_statics/dynamics_vs_statics.jpg>
 Package pdftex.def Info: figures/dynamics_vs_statics/dynamics_vs_statics.jpg us
-ed on input line 172.
+ed on input line 180.
 (pdftex.def)             Requested size: 497.92322pt x 175.16374pt.
 
 
@@ -1112,9 +1112,9 @@ Package caption Warning: Unused \captionsetup[sub] on input line 20.
 See the caption package documentation for explanation.
 
 LaTeX Font Info:    Font shape `OT1/phv/bx/it' in size <11> not available
-(Font)              Font shape `OT1/phv/b/it' tried instead on input line 183.
+(Font)              Font shape `OT1/phv/b/it' tried instead on input line 191.
 LaTeX Font Info:    Font shape `OT1/phv/b/it' in size <11> not available
-(Font)              Font shape `OT1/phv/b/sl' tried instead on input line 183.
+(Font)              Font shape `OT1/phv/b/sl' tried instead on input line 191.
 
 Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
@@ -1174,22 +1174,25 @@ Overfull \vbox (3.49998pt too high) has occurred while \output is active []
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 183.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 183.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 191.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 191.
 (./frontiers.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 183.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 183.
-Package rerunfilecheck Info: File `frontiers.out' has not changed.
-(rerunfilecheck)             Checksum: 847B0BC639B8354BD9B76839E20894A8;301.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 191.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 191.
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+Package rerunfilecheck Warning: File `frontiers.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
 
+Package rerunfilecheck Info: Checksums for `frontiers.out':
+(rerunfilecheck)             Before: 847B0BC639B8354BD9B76839E20894A8;301
+(rerunfilecheck)             After:  27A900D255AACBA16D4F6E0632950D42;410.
  ) 
 Here is how much of TeX's memory you used:
- 12022 strings out of 492995
- 180988 string characters out of 6132704
- 327595 words of memory out of 5000000
+ 12024 strings out of 492995
+ 181011 string characters out of 6132704
+ 327793 words of memory out of 5000000
  15215 multiletter control sequences out of 15000+600000
  44967 words of font info for 122 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
@@ -1206,10 +1209,10 @@ onts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/ty
 pe1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/ur
 w/times/utmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb>
-Output written on frontiers.pdf (10 pages, 6235473 bytes).
+Output written on frontiers.pdf (10 pages, 6235890 bytes).
 PDF statistics:
- 141 PDF objects out of 1000 (max. 8388607)
- 107 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
+ 143 PDF objects out of 1000 (max. 8388607)
+ 109 compressed objects within 2 object streams
+ 27 named destinations out of 1000 (max. 500000)
  41046 words of extra memory for PDF output out of 42996 (max. 10000000)
 
